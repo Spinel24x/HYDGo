@@ -1,0 +1,25 @@
+{
+  "build": {
+    "builder": "DOCKERFILE"
+  },
+  "deploy": {
+    "startCommand": "/app/scripts/entrypoint.sh",
+    "healthcheckPath": "/health",
+    "restartPolicyType": "ON_FAILURE",
+    "numReplicas": 1
+  },
+  "volumes": {
+    "xray-config": {
+      "mountPath": "/app/config"
+    },
+    "xray-logs": {
+      "mountPath": "/app/logs"
+    },
+    "xray-data": {
+      "mountPath": "/app/data"
+    },
+    "xray-modules": {
+      "mountPath": "/app/modules"
+    }
+  }
+}
