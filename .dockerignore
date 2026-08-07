@@ -1,0 +1,8 @@
+.git
+.gitignore
+README.md
+*.md
+.env
+docker-compose.yml
+.DS_Store
+railway.json
