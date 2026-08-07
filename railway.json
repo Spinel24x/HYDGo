@@ -3,8 +3,8 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
-    "startCommand": "/app/scripts/entrypoint.sh",
-    "healthcheckPath": "/health",
-    "restartPolicyType": "ON_FAILURE"
+    "startCommand": "/app/entrypoint.sh",
+    "restartPolicyType": "ON_FAILURE",
+    "numReplicas": 1
   }
 }
