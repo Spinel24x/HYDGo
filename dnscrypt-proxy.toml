@@ -1,0 +1,42 @@
+# گوش دادن روی همه interface ها
+listen_addresses = ['0.0.0.0:53']
+
+# سرورهای DNSCrypt
+server_names = ['cloudflare', 'google', 'quad9-dnscrypt-ip4-filter-pri']
+
+# فورس TCP (برای Railway)
+force_tcp = true
+
+# DNS caching
+cache = true
+cache_size = 4096
+cache_min_ttl = 600
+cache_max_ttl = 86400
+cache_neg_min_ttl = 60
+cache_neg_max_ttl = 600
+
+# لاگ
+log_level = 2
+log_file = '/var/log/dnscrypt-proxy.log'
+
+# فایل‌های موقت
+user_name = 'nobody'
+
+# مسدود کردن دامنه‌های مخرب (اختیاری)
+[blocked_names]
+blocked_names_file = '/etc/dnscrypt-proxy/blocked-names.txt'
+
+# آنی‌سازی (برای حفظ حریم خصوصی)
+[anonymized_dns]
+routes = [
+    { server_name='relay-anonymized-cs-nl', via=['sdns://...'] }
+]
+
+# تست و تحمل خطا
+timeout = 5000
+keepalive = 30
+
+# لاگ کوئری‌ها (برای تست بذار، بعداً خاموش کن)
+[query_log]
+file = '/var/log/query.log'
+format = 'tsv'
