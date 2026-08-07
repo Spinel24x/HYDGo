@@ -1,6 +1,6 @@
 # ============================================
 # Xray Anti-DPI - Railway Deployment
-# All-in-one Dockerfile with extensible structure
+# All files in main root
 # ============================================
 
 FROM alpine:3.19 AS builder
@@ -63,23 +63,25 @@ RUN mkdir -p /app/config \
     && chown -R xray:xray /app /etc/xray /var/log/xray
 
 # ============================================
-# کپی فایل‌های پروژه از main
+# کپی فایل‌های پروژه از root
 # ============================================
 
-# کانفیگ پیش‌فرض
+# کانفیگ
 COPY config.json /app/config/config.json
-RUN ln -sf /app/config/config.json /etc/xray/config.json
 
 # اسکریپت‌ها
 COPY entrypoint.sh /app/scripts/entrypoint.sh
 COPY healthcheck.sh /app/scripts/healthcheck.sh
 
-# ماژول‌های Anti-DPI (همه فایل‌های modules رو کپی کن)
-COPY modules/ /app/modules/
+# ماژول‌های Anti-DPI (همه از root)
+COPY anti-dpi-*.sh /app/modules/
+
+# لینک کانفیگ
+RUN ln -sf /app/config/config.json /etc/xray/config.json
 
 # تنظیم permissions
 RUN chmod +x /app/scripts/*.sh \
-    && chmod +x /app/modules/*.sh 2>/dev/null || true \
+    && chmod +x /app/modules/*.sh \
     && chown -R xray:xray /app
 
 # ============================================
@@ -89,7 +91,7 @@ ENV XRAY_CONFIG_PATH=/app/config/config.json \
     XRAY_MODULES_PATH=/app/modules \
     XRAY_SCRIPTS_PATH=/app/scripts \
     XRAY_LOGS_PATH=/app/logs \
-    RAILWAY_PORT=443 \
+    PORT=443 \
     LOG_LEVEL=warning \
     ENABLE_FRAGMENT=false \
     ENABLE_NOISE=false \
