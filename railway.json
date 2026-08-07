@@ -1,25 +1,81 @@
 {
-  "build": {
-    "builder": "DOCKERFILE"
+  "log": {
+    "loglevel": "warning",
+    "access": "/app/logs/access.log",
+    "error": "/app/logs/error.log"
   },
-  "deploy": {
-    "startCommand": "/app/scripts/entrypoint.sh",
-    "healthcheckPath": "/health",
-    "restartPolicyType": "ON_FAILURE",
-    "numReplicas": 1
-  },
-  "volumes": {
-    "xray-config": {
-      "mountPath": "/app/config"
-    },
-    "xray-logs": {
-      "mountPath": "/app/logs"
-    },
-    "xray-data": {
-      "mountPath": "/app/data"
-    },
-    "xray-modules": {
-      "mountPath": "/app/modules"
+  "inbounds": [
+    {
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "UUID_PLACEHOLDER",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "show": false,
+          "dest": "www.microsoft.com:443",
+          "xver": 0,
+          "serverNames": [
+            "www.microsoft.com",
+            "www.cloudflare.com",
+            "www.apple.com"
+          ],
+          "privateKey": "PRIVATE_KEY_PLACEHOLDER",
+          "shortIds": ["SHORT_ID_PLACEHOLDER"]
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls", "quic"]
+      }
     }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct",
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      }
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    },
+    {
+      "protocol": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "dns": {
+    "servers": [
+      "8.8.8.8",
+      "1.1.1.1",
+      "localhost"
+    ]
+  },
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:category-ads"],
+        "outboundTag": "block"
+      }
+    ]
   }
 }
