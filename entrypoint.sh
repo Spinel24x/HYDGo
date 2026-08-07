@@ -2,7 +2,7 @@
 set -e
 
 echo "========================================="
-echo "  DNSCrypt Proxy - Starting"
+echo "  DNSCrypt Proxy  Starting"
 echo "========================================="
 echo ""
 
