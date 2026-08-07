@@ -108,9 +108,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 USER xray
 WORKDIR /app
 
-# Volumes برای داده‌های persistent
-VOLUME ["/app/config", "/app/logs", "/app/data", "/app/modules"]
-
 # Ports
 EXPOSE 443 80 8080
 
